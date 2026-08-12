@@ -1,38 +1,62 @@
 ﻿using System;
 
-class FiltroSeguridad
+class AnalizadorNombres
 {
     static void Main(string[] args)
     {
         Console.WriteLine("=====================================");
-        Console.WriteLine("   FILTRO DE SEGURIDAD - NIVEL 2");
+        Console.WriteLine("   ANALIZADOR DE NOMBRES - NIVEL 2");
         Console.WriteLine("=====================================\n");
 
-        // Secuencia de códigos de ejemplo a procesar
-        string[] codigos = { "OK", "ERROR", "OK", "WARNING", "ERROR", "EXIT", "OK", "OK" };
+        string nombreOriginal = LeerTextoValidado("Ingrese el nombre completo: ");
 
-        Console.WriteLine("Procesando secuencia de códigos...\n");
+        // --- Manejo de espacios innecesarios ---
+        // Trim() quita espacios al inicio y al final.
+        // Reemplazamos múltiples espacios internos por uno solo.
+        string nombreLimpio = LimpiarEspacios(nombreOriginal);
 
-        foreach (string codigo in codigos)
+        int cantidadCaracteres = nombreLimpio.Length;
+        string nombreMayusculas = nombreLimpio.ToUpper();
+        string nombreMinusculas = nombreLimpio.ToLower();
+
+        Console.WriteLine("\n===== REPORTE DEL NOMBRE =====");
+        Console.WriteLine($"Nombre limpio      : \"{nombreLimpio}\"");
+        Console.WriteLine($"Cantidad caracteres : {cantidadCaracteres}");
+        Console.WriteLine($"En MAYÚSCULAS      : {nombreMayusculas}");
+        Console.WriteLine($"en minúsculas      : {nombreMinusculas}");
+    }
+
+    // Pide texto y valida que no esté vacío ni sean solo espacios
+    static string LeerTextoValidado(string mensaje)
+    {
+        string entrada;
+
+        do
         {
-            // --- continue: ignora "ERROR" y pasa al siguiente elemento ---
-            if (codigo == "ERROR")
+            Console.Write(mensaje);
+            entrada = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(entrada))
             {
-                Console.WriteLine($" - {codigo} -> ignorado (continue)");
-                continue;
+                Console.WriteLine("Error: el nombre no puede estar vacío.\n");
             }
 
-            // --- break: detiene todo el procesamiento al encontrar "EXIT" ---
-            if (codigo == "EXIT")
-            {
-                Console.WriteLine($" - {codigo} -> deteniendo procesamiento (break)");
-                break;
-            }
+        } while (string.IsNullOrWhiteSpace(entrada));
 
-            // Cualquier otro código se procesa normalmente
-            Console.WriteLine($" - {codigo} -> procesado correctamente");
+        return entrada;
+    }
+
+    // Quita espacios al inicio/final y colapsa espacios dobles internos
+    static string LimpiarEspacios(string texto)
+    {
+        string resultado = texto.Trim();
+
+        // Mientras existan espacios dobles, los vamos reemplazando por uno solo
+        while (resultado.Contains("  "))
+        {
+            resultado = resultado.Replace("  ", " ");
         }
 
-        Console.WriteLine("\n>>> Procesamiento finalizado.");
+        return resultado;
     }
 }
