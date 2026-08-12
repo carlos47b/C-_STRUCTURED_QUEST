@@ -1,28 +1,46 @@
 ﻿using System;
 
-class VerificacionEdad
+class SistemaAutorizacion
 {
     static void Main(string[] args)
     {
         Console.WriteLine("=====================================");
-        Console.WriteLine("   VERIFICACIÓN DE EDAD - NIVEL 1");
+        Console.WriteLine("   SISTEMA DE AUTORIZACIÓN - NIVEL 1");
         Console.WriteLine("=====================================\n");
 
-        int edad = LeerEnteroValidado("Ingrese la edad del operador: ");
+  
+        int edad = LeerEnteroValidado("Ingrese la edad del operador: ", 0, 120);
 
      
-        if (edad >= 18)
+        int nivelSeguridad = LeerEnteroValidado("Ingrese el nivel de seguridad (1-5): ", 1, 5);
+
+
+        bool credencialActiva = LeerBooleanoValidado("¿Credencial activa? (S/N): ");
+
+        bool accesoAutorizado = (edad >= 18) && (nivelSeguridad >= 3) && credencialActiva;
+
+        Console.WriteLine("\n===== RESULTADO =====");
+        if (accesoAutorizado)
         {
-            Console.WriteLine("\n>>> Acceso permitido");
+            Console.WriteLine(">>> ACCESO AUTORIZADO");
+            Console.WriteLine("> MISIÓN CUMPLIDA");
         }
         else
         {
-            Console.WriteLine("\n>>> Acceso restringido");
+            Console.WriteLine(">>> ACCESO DENEGADO");
+
+
+            if (edad < 18)
+                Console.WriteLine("   - Motivo: edad insuficiente.");
+            if (nivelSeguridad < 3)
+                Console.WriteLine("   - Motivo: nivel de seguridad insuficiente.");
+            if (!credencialActiva)
+                Console.WriteLine("   - Motivo: credencial inactiva.");
         }
     }
 
-    
-    static int LeerEnteroValidado(string mensaje)
+
+    static int LeerEnteroValidado(string mensaje, int min, int max)
     {
         int valor;
         bool esValido;
@@ -36,16 +54,35 @@ class VerificacionEdad
 
             if (!esValido)
             {
-                Console.WriteLine("Error: debe ingresar un número entero válido.\n");
+                Console.WriteLine($"Error: debe ingresar un número entero válido.\n");
             }
-            else if (valor < 0)
+            else if (valor < min || valor > max)
             {
-                Console.WriteLine("Error: la edad no puede ser negativa.\n");
+                Console.WriteLine($"Error: el valor debe estar entre {min} y {max}.\n");
                 esValido = false;
             }
 
         } while (!esValido);
 
         return valor;
+    }
+
+    static bool LeerBooleanoValidado(string mensaje)
+    {
+        string entrada;
+
+        do
+        {
+            Console.Write(mensaje);
+            entrada = Console.ReadLine().Trim().ToUpper();
+
+            if (entrada != "S" && entrada != "N")
+            {
+                Console.WriteLine("Error: responda solo con S (Sí) o N (No).\n");
+            }
+
+        } while (entrada != "S" && entrada != "N");
+
+        return entrada == "S";
     }
 }
