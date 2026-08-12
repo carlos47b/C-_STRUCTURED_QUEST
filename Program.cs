@@ -1,49 +1,73 @@
 ﻿using System;
 
-class ClasificadorAlertas
+class PanelControl
 {
     static void Main(string[] args)
     {
         Console.WriteLine("=====================================");
-        Console.WriteLine("   CLASIFICADOR DE ALERTAS - NIVEL 1");
+        Console.WriteLine("   PANEL DE CONTROL - NIVEL 1");
         Console.WriteLine("=====================================\n");
 
-        Console.Write("Ingrese el nivel de alerta (0-10): ");
-        string entrada = Console.ReadLine();
+        bool salir = false;
 
-        int nivel;
-        bool esValido = int.TryParse(entrada, out nivel);
+    
+        while (!salir)
+        {
+            MostrarMenu();
 
-        if (!esValido)
-        {
-            Console.WriteLine("\n>>> NIVEL DE ALERTA INVÁLIDO");
-            return; 
-        }
+            Console.Write("\nSeleccione una opción: ");
+            string entrada = Console.ReadLine();
 
-        if (nivel == 0)
-        {
-            Console.WriteLine("\n>>> NORMAL");
+            int opcion;
+            bool esValido = int.TryParse(entrada, out opcion);
+
+            if (!esValido)
+            {
+                Console.WriteLine("\n>>> OPCIÓN NO VÁLIDA\n");
+                continue; 
+            }
+
+          
+            switch (opcion)
+            {
+                case 1:
+                    Console.WriteLine("\n>>> ESTADO DEL SISTEMA: Operativo\n");
+                    break;
+
+                case 2:
+                    Console.WriteLine("\n>>> TEMPERATURA ACTUAL: 22°C\n");
+                    break;
+
+                case 3:
+                    Console.WriteLine("\n>>> OPERADORES ACTIVOS: 4\n");
+                    break;
+
+                case 4:
+                    Console.WriteLine("\n>>> REINICIANDO SISTEMA...\n");
+                    Console.WriteLine(">>> SISTEMA REINICIADO CON ÉXITO\n");
+                    break;
+
+                case 5:
+                    Console.WriteLine("\n>>> CERRANDO PANEL DE CONTROL...");
+                    Console.WriteLine("> MISIÓN CUMPLIDA");
+                    salir = true;
+                    break;
+
+                default:
+                    Console.WriteLine("\n>>> OPCIÓN NO VÁLIDA\n");
+                    break;
+            }
         }
-        else if (nivel >= 1 && nivel <= 3)
-        {
-            Console.WriteLine("\n>>> ADVERTENCIA");
-        }
-        else if (nivel >= 4 && nivel <= 6)
-        {
-            Console.WriteLine("\n>>> PELIGRO");
-        }
-        else if (nivel >= 7 && nivel <= 9)
-        {
-            Console.WriteLine("\n>>> CRÍTICO");
-        }
-        else if (nivel == 10)
-        {
-            Console.WriteLine("\n>>> EMERGENCIA");
-        }
-        else
-        {
-            
-            Console.WriteLine("\n>>> NIVEL DE ALERTA INVÁLIDO");
-        }
+    }
+
+    static void MostrarMenu()
+    {
+        Console.WriteLine("========== PANEL DE CONTROL ==========");
+        Console.WriteLine("1. Consultar estado");
+        Console.WriteLine("2. Mostrar temperatura");
+        Console.WriteLine("3. Mostrar operadores");
+        Console.WriteLine("4. Reiniciar sistema");
+        Console.WriteLine("5. Salir");
+        Console.WriteLine("=======================================");
     }
 }
