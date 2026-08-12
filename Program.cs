@@ -1,53 +1,73 @@
 ﻿using System;
 
-class LoginSistema
+class MenuPersistente
 {
-    // Credenciales válidas (puedes cambiarlas por las que pida tu docente)
-    const string USUARIO_VALIDO = "admin";
-    const string CLAVE_VALIDA = "1234";
-
     static void Main(string[] args)
     {
         Console.WriteLine("=====================================");
-        Console.WriteLine("      LOGIN DEL SISTEMA - NIVEL 1");
+        Console.WriteLine("     MENÚ PERSISTENTE - NIVEL 2");
         Console.WriteLine("=====================================\n");
 
-        int intentos = 0;
-        const int MAX_INTENTOS = 3;
-        bool accesoConcedido = false;
+        int opcion;
 
-        // --- Ciclo while: se repite mientras haya intentos disponibles ---
-        while (intentos < MAX_INTENTOS && !accesoConcedido)
+        // --- do-while: el bloque se ejecuta al menos una vez ---
+        // por eso el menú se muestra siempre, aunque la condición
+        // de salida se evalúe hasta el final del bloque.
+        do
         {
-            Console.Write("Usuario: ");
-            string usuario = Console.ReadLine();
+            MostrarMenu();
 
-            Console.Write("Contraseña: ");
-            string clave = Console.ReadLine();
+            Console.Write("\nSeleccione una opción: ");
+            string entrada = Console.ReadLine();
 
-            if (usuario == USUARIO_VALIDO && clave == CLAVE_VALIDA)
+            bool esValido = int.TryParse(entrada, out opcion);
+
+            if (!esValido)
             {
-                accesoConcedido = true;
-                Console.WriteLine("\n>>> ACCESO CONCEDIDO");
-                Console.WriteLine($">>> Bienvenido, {usuario}.");
+                Console.WriteLine("\n>>> OPCIÓN NO VÁLIDA\n");
+                opcion = 0; // valor "neutro" para que el switch caiga en default
             }
-            else
+
+            switch (opcion)
             {
-                intentos++;
-                int restantes = MAX_INTENTOS - intentos;
+                case 1:
+                    Console.WriteLine("\n>>> Opción 1 ejecutada.\n");
+                    break;
 
-                if (restantes > 0)
-                {
-                    Console.WriteLine($"\nUsuario o contraseña incorrectos.");
-                    Console.WriteLine($"Intentos restantes: {restantes}\n");
-                }
+                case 2:
+                    Console.WriteLine("\n>>> Opción 2 ejecutada.\n");
+                    break;
+
+                case 3:
+                    Console.WriteLine("\n>>> Opción 3 ejecutada.\n");
+                    break;
+
+                case 4:
+                    Console.WriteLine("\n>>> Opción 4 ejecutada.\n");
+                    break;
+
+                case 5:
+                    Console.WriteLine("\n>>> Saliendo del sistema...");
+                    Console.WriteLine("> MISIÓN CUMPLIDA");
+                    break;
+
+                default:
+                    if (esValido) // solo mostramos esto si fue número pero fuera de rango
+                        Console.WriteLine("\n>>> OPCIÓN NO VÁLIDA\n");
+                    break;
             }
-        }
 
-        // Si se acabaron los intentos y nunca hubo acceso, se bloquea el sistema
-        if (!accesoConcedido)
-        {
-            Console.WriteLine("\n>>> SISTEMA BLOQUEADO");
-        }
+        } while (opcion != 5); // se repite hasta que el usuario elija "Salir"
+    }
+
+    static void MostrarMenu()
+    {
+        Console.WriteLine("============ MENÚ PRINCIPAL ============");
+        Console.WriteLine("1. Opción 1");
+        Console.WriteLine("2. Opción 2");
+        Console.WriteLine("3. Opción 3");
+        Console.WriteLine("4. Opción 4");
+        Console.WriteLine("5. Salir");
+        Console.WriteLine("==========================================");
     }
 }
