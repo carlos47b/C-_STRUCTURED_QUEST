@@ -1,74 +1,53 @@
 ﻿using System;
 
-class PanelControl
+class LoginSistema
 {
+    // Credenciales válidas (puedes cambiarlas por las que pida tu docente)
+    const string USUARIO_VALIDO = "admin";
+    const string CLAVE_VALIDA = "1234";
+
     static void Main(string[] args)
     {
         Console.WriteLine("=====================================");
-        Console.WriteLine("   PANEL DE CONTROL - NIVEL 1");
+        Console.WriteLine("      LOGIN DEL SISTEMA - NIVEL 1");
         Console.WriteLine("=====================================\n");
 
-        bool salir = false;
+        int intentos = 0;
+        const int MAX_INTENTOS = 3;
+        bool accesoConcedido = false;
 
-    
-        while (!salir)
+        // --- Ciclo while: se repite mientras haya intentos disponibles ---
+        while (intentos < MAX_INTENTOS && !accesoConcedido)
         {
-            MostrarMenu();
+            Console.Write("Usuario: ");
+            string usuario = Console.ReadLine();
 
-            Console.Write("\nSeleccione una opción: ");
-            string entrada = Console.ReadLine();
+            Console.Write("Contraseña: ");
+            string clave = Console.ReadLine();
 
-            int opcion;
-            bool esValido = int.TryParse(entrada, out opcion);
-
-            if (!esValido)
+            if (usuario == USUARIO_VALIDO && clave == CLAVE_VALIDA)
             {
-                Console.WriteLine("\n>>> OPCIÓN NO VÁLIDA\n");
-                continue; 
+                accesoConcedido = true;
+                Console.WriteLine("\n>>> ACCESO CONCEDIDO");
+                Console.WriteLine($">>> Bienvenido, {usuario}.");
             }
-
-          
-            switch (opcion)
+            else
             {
-                case 1:
-                    Console.WriteLine("\n>>> ESTADO DEL SISTEMA: Operativo\n");
-                    break;
+                intentos++;
+                int restantes = MAX_INTENTOS - intentos;
 
-                case 2:
-                    Console.WriteLine("\n>>> TEMPERATURA ACTUAL: 22°C\n");
-                    break;
-
-                case 3:
-                    Console.WriteLine("\n>>> OPERADORES ACTIVOS: 4\n");
-                    break;
-
-                case 4:
-                    Console.WriteLine("\n>>> REINICIANDO SISTEMA...\n");
-                    Console.WriteLine(">>> SISTEMA REINICIADO CON ÉXITO\n");
-                    break;
-
-                case 5:
-                    Console.WriteLine("\n>>> CERRANDO PANEL DE CONTROL...");
-                    Console.WriteLine("> MISIÓN CUMPLIDA");
-                    salir = true;
-                    break;
-
-                default:
-                    Console.WriteLine("\n>>> OPCIÓN NO VÁLIDA\n");
-                    break;
+                if (restantes > 0)
+                {
+                    Console.WriteLine($"\nUsuario o contraseña incorrectos.");
+                    Console.WriteLine($"Intentos restantes: {restantes}\n");
+                }
             }
         }
-    }
 
-    static void MostrarMenu()
-    {
-        Console.WriteLine("========== PANEL DE CONTROL ==========");
-        Console.WriteLine("1. Consultar estado");
-        Console.WriteLine("2. Mostrar temperatura");
-        Console.WriteLine("3. Mostrar operadores");
-        Console.WriteLine("4. Reiniciar sistema");
-        Console.WriteLine("5. Salir");
-        Console.WriteLine("=======================================");
+        // Si se acabaron los intentos y nunca hubo acceso, se bloquea el sistema
+        if (!accesoConcedido)
+        {
+            Console.WriteLine("\n>>> SISTEMA BLOQUEADO");
+        }
     }
 }
-//
