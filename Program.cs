@@ -1,31 +1,38 @@
 ﻿using System;
 
-class ProcesadorOperadores
+class FiltroSeguridad
 {
     static void Main(string[] args)
     {
         Console.WriteLine("=====================================");
-        Console.WriteLine("  PROCESADOR DE OPERADORES - NIVEL 2");
+        Console.WriteLine("   FILTRO DE SEGURIDAD - NIVEL 2");
         Console.WriteLine("=====================================\n");
 
-        // Colección de nombres de operadores (arreglo de strings)
-        string[] operadores = { "Ana", "Eduardo", "Luis", "Valentina", "Max", "Carlos", "Eva" };
+        // Secuencia de códigos de ejemplo a procesar
+        string[] codigos = { "OK", "ERROR", "OK", "WARNING", "ERROR", "EXIT", "OK", "OK" };
 
-        Console.WriteLine("Lista completa de operadores:");
-        foreach (string nombre in operadores)
+        Console.WriteLine("Procesando secuencia de códigos...\n");
+
+        foreach (string codigo in codigos)
         {
-            Console.WriteLine($" - {nombre}");
-        }
-
-        Console.WriteLine("\n===== OPERADORES CON MÁS DE 4 CARACTERES =====");
-
-        // --- foreach + if + String (Length) pedido por el enunciado ---
-        foreach (string nombre in operadores)
-        {
-            if (nombre.Length > 4)
+            // --- continue: ignora "ERROR" y pasa al siguiente elemento ---
+            if (codigo == "ERROR")
             {
-                Console.WriteLine($" - {nombre} ({nombre.Length} caracteres)");
+                Console.WriteLine($" - {codigo} -> ignorado (continue)");
+                continue;
             }
+
+            // --- break: detiene todo el procesamiento al encontrar "EXIT" ---
+            if (codigo == "EXIT")
+            {
+                Console.WriteLine($" - {codigo} -> deteniendo procesamiento (break)");
+                break;
+            }
+
+            // Cualquier otro código se procesa normalmente
+            Console.WriteLine($" - {codigo} -> procesado correctamente");
         }
+
+        Console.WriteLine("\n>>> Procesamiento finalizado.");
     }
 }
