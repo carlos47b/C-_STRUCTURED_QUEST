@@ -1,73 +1,54 @@
 ﻿using System;
 
-class MenuPersistente
+class GeneradorTablas
 {
     static void Main(string[] args)
     {
         Console.WriteLine("=====================================");
-        Console.WriteLine("     MENÚ PERSISTENTE - NIVEL 2");
+        Console.WriteLine("   GENERADOR DE TABLAS - NIVEL 2");
         Console.WriteLine("=====================================\n");
 
-        int opcion;
+        int numero = LeerEnteroValidado("Ingrese el número a multiplicar: ");
+        int inicio = LeerEnteroValidado("Ingrese el inicio del rango: ");
+        int fin = LeerEnteroValidado("Ingrese el fin del rango: ");
 
-        // --- do-while: el bloque se ejecuta al menos una vez ---
-        // por eso el menú se muestra siempre, aunque la condición
-        // de salida se evalúe hasta el final del bloque.
+        // Validamos que el rango tenga sentido (inicio no debe ser mayor que fin)
+        while (inicio > fin)
+        {
+            Console.WriteLine("\nError: el inicio no puede ser mayor que el fin. Intente de nuevo.\n");
+            inicio = LeerEnteroValidado("Ingrese el inicio del rango: ");
+            fin = LeerEnteroValidado("Ingrese el fin del rango: ");
+        }
+
+        Console.WriteLine($"\n===== TABLA DEL {numero} (de {inicio} a {fin}) =====");
+
+        // --- Ciclo for pedido por el enunciado ---
+        for (int i = inicio; i <= fin; i++)
+        {
+            int resultado = numero * i;
+            Console.WriteLine($"{numero} x {i} = {resultado}");
+        }
+    }
+
+    // Lee y valida un número entero cualquiera (puede ser negativo, ej: multiplicadores negativos)
+    static int LeerEnteroValidado(string mensaje)
+    {
+        int valor;
+        bool esValido;
+
         do
         {
-            MostrarMenu();
-
-            Console.Write("\nSeleccione una opción: ");
+            Console.Write(mensaje);
             string entrada = Console.ReadLine();
-
-            bool esValido = int.TryParse(entrada, out opcion);
+            esValido = int.TryParse(entrada, out valor);
 
             if (!esValido)
             {
-                Console.WriteLine("\n>>> OPCIÓN NO VÁLIDA\n");
-                opcion = 0; // valor "neutro" para que el switch caiga en default
+                Console.WriteLine("Error: debe ingresar un número entero válido.\n");
             }
 
-            switch (opcion)
-            {
-                case 1:
-                    Console.WriteLine("\n>>> Opción 1 ejecutada.\n");
-                    break;
+        } while (!esValido);
 
-                case 2:
-                    Console.WriteLine("\n>>> Opción 2 ejecutada.\n");
-                    break;
-
-                case 3:
-                    Console.WriteLine("\n>>> Opción 3 ejecutada.\n");
-                    break;
-
-                case 4:
-                    Console.WriteLine("\n>>> Opción 4 ejecutada.\n");
-                    break;
-
-                case 5:
-                    Console.WriteLine("\n>>> Saliendo del sistema...");
-                    Console.WriteLine("> MISIÓN CUMPLIDA");
-                    break;
-
-                default:
-                    if (esValido) // solo mostramos esto si fue número pero fuera de rango
-                        Console.WriteLine("\n>>> OPCIÓN NO VÁLIDA\n");
-                    break;
-            }
-
-        } while (opcion != 5); // se repite hasta que el usuario elija "Salir"
-    }
-
-    static void MostrarMenu()
-    {
-        Console.WriteLine("============ MENÚ PRINCIPAL ============");
-        Console.WriteLine("1. Opción 1");
-        Console.WriteLine("2. Opción 2");
-        Console.WriteLine("3. Opción 3");
-        Console.WriteLine("4. Opción 4");
-        Console.WriteLine("5. Salir");
-        Console.WriteLine("==========================================");
+        return valor;
     }
 }
