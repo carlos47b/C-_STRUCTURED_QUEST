@@ -1,89 +1,72 @@
 ﻿using System;
 
-class ValidadorDatos
+class RelojSistema
 {
     static void Main(string[] args)
     {
         Console.WriteLine("=====================================");
-        Console.WriteLine("   VALIDADOR DE DATOS - NIVEL 2");
+        Console.WriteLine("     RELOJ DEL SISTEMA - NIVEL 2");
         Console.WriteLine("=====================================\n");
 
-        
-        int edad = LeerEnteroConTryParse("Ingrese su edad: ");
-        double salario = LeerDoubleConTryParse("Ingrese su salario: ");
-        int anioNacimiento = LeerEnteroConTryParse("Ingrese su año de nacimiento: ");
+        DateTime ahora = DateTime.Now;
 
-        Console.WriteLine("\n===== DATOS VALIDADOS =====");
-        Console.WriteLine($"Edad             : {edad}");
-        Console.WriteLine($"Salario          : {salario:C}"); 
-        Console.WriteLine($"Año de nacimiento: {anioNacimiento}");
+        Console.WriteLine("===== FECHA Y HORA ACTUAL =====");
+        Console.WriteLine($"Fecha y hora completa : {ahora}");
+        Console.WriteLine($"Día                    : {ahora.Day}");
+        Console.WriteLine($"Mes                    : {ahora.Month} ({ahora:MMMM})");
+        Console.WriteLine($"Año                    : {ahora.Year}");
+        Console.WriteLine($"Hora                   : {ahora:HH:mm:ss}");
+        Console.WriteLine($"Día de la semana       : {ahora.DayOfWeek}");
 
-        
-        Console.WriteLine("\n--- Ejemplo adicional usando Parse() con try/catch ---");
-        Console.Write("Ingrese un número extra para probar Parse(): ");
-        string entradaExtra = Console.ReadLine();
+        // --- Reto adicional: calcular edad a partir de fecha de nacimiento ---
+        Console.WriteLine("\n===== CÁLCULO DE EDAD =====");
+        DateTime fechaNacimiento = LeerFechaValidada("Ingrese su fecha de nacimiento (dd/mm/aaaa): ");
 
-        try
-        {
-            int numeroExtra = int.Parse(entradaExtra);
-            Console.WriteLine($"Número ingresado correctamente: {numeroExtra}");
-        }
-        catch (FormatException)
-        {
-            Console.WriteLine("Error: el texto ingresado no tiene un formato numérico válido.");
-        }
-        catch (OverflowException)
-        {
-            Console.WriteLine("Error: el número es demasiado grande o pequeño para un entero.");
-        }
+        int edad = CalcularEdad(fechaNacimiento, ahora);
+
+        Console.WriteLine($"\nFecha de nacimiento: {fechaNacimiento:dd/MM/yyyy}");
+        Console.WriteLine($"Edad actual: {edad} años");
     }
 
-   
-    static int LeerEnteroConTryParse(string mensaje)
+    // Pide una fecha como texto y la valida con TryParse (no truena con texto inválido)
+    static DateTime LeerFechaValidada(string mensaje)
     {
-        int valor;
+        DateTime fecha;
         bool esValido;
 
         do
         {
             Console.Write(mensaje);
             string entrada = Console.ReadLine();
-            esValido = int.TryParse(entrada, out valor);
+            esValido = DateTime.TryParse(entrada, out fecha);
 
             if (!esValido)
             {
-                Console.WriteLine("Error: ingrese un número entero válido (sin letras ni símbolos).\n");
+                Console.WriteLine("Error: formato de fecha inválido. Use dd/mm/aaaa.\n");
             }
-
-        } while (!esValido);
-
-        return valor;
-    }
-
-   
-    static double LeerDoubleConTryParse(string mensaje)
-    {
-        double valor;
-        bool esValido;
-
-        do
-        {
-            Console.Write(mensaje);
-            string entrada = Console.ReadLine();
-            esValido = double.TryParse(entrada, out valor);
-
-            if (!esValido)
+            else if (fecha > DateTime.Now)
             {
-                Console.WriteLine("Error: ingrese un número válido (puede tener decimales).\n");
-            }
-            else if (valor < 0)
-            {
-                Console.WriteLine("Error: el salario no puede ser negativo.\n");
+                Console.WriteLine("Error: la fecha de nacimiento no puede ser en el futuro.\n");
                 esValido = false;
             }
 
         } while (!esValido);
 
-        return valor;
+        return fecha;
+    }
+
+
+    static int CalcularEdad(DateTime nacimiento, DateTime fechaActual)
+    {
+        int edad = fechaActual.Year - nacimiento.Year;
+
+       
+        if (fechaActual.Month < nacimiento.Month ||
+           (fechaActual.Month == nacimiento.Month && fechaActual.Day < nacimiento.Day))
+        {
+            edad--;
+        }
+
+        return edad;
     }
 }
