@@ -1,32 +1,24 @@
 ﻿using System;
 
-class CalculadoraRecursos
+class VerificacionEdad
 {
     static void Main(string[] args)
     {
         Console.WriteLine("=====================================");
-        Console.WriteLine("   CALCULADORA DE RECURSOS - NIVEL 1");
+        Console.WriteLine("   VERIFICACIÓN DE EDAD - NIVEL 1");
         Console.WriteLine("=====================================\n");
 
-       
-        int trabajadores = LeerEnteroValidado("Ingrese la cantidad de trabajadores: ");
+        int edad = LeerEnteroValidado("Ingrese la edad del operador: ");
 
-       
-        double horas = LeerDoubleValidado("Ingrese las horas trabajadas: ");
-
-      
-        double consumoPorHora = LeerDoubleValidado("Ingrese el consumo por hora (recurso/hora): ");
-
-        
-        double consumoTotal = trabajadores * horas * consumoPorHora;
-
-      
-        Console.WriteLine("\n===== REPORTE DE CONSUMO =====");
-        Console.WriteLine($"Trabajadores      : {trabajadores}");
-        Console.WriteLine($"Horas trabajadas  : {horas}");
-        Console.WriteLine($"Consumo por hora  : {consumoPorHora}");
-        Console.WriteLine($"Consumo total     : {consumoTotal}");
-        Console.WriteLine("================================");
+     
+        if (edad >= 18)
+        {
+            Console.WriteLine("\n>>> Acceso permitido");
+        }
+        else
+        {
+            Console.WriteLine("\n>>> Acceso restringido");
+        }
     }
 
     
@@ -40,7 +32,7 @@ class CalculadoraRecursos
             Console.Write(mensaje);
             string entrada = Console.ReadLine();
 
-           
+            esValido = int.TryParse(entrada, out valor);
 
             if (!esValido)
             {
@@ -48,35 +40,7 @@ class CalculadoraRecursos
             }
             else if (valor < 0)
             {
-                Console.WriteLine("Error: el valor no puede ser negativo.\n");
-                esValido = false; 
-            }
-
-        } while (!esValido);
-
-        return valor;
-    }
-
- 
-    static double LeerDoubleValidado(string mensaje)
-    {
-        double valor;
-        bool esValido;
-
-        do
-        {
-            Console.Write(mensaje);
-            string entrada = Console.ReadLine();
-
-            esValido = double.TryParse(entrada, out valor);
-
-            if (!esValido)
-            {
-                Console.WriteLine("Error: debe ingresar un número válido.\n");
-            }
-            else if (valor < 0)
-            {
-                Console.WriteLine("Error: el valor no puede ser negativo.\n");
+                Console.WriteLine("Error: la edad no puede ser negativa.\n");
                 esValido = false;
             }
 
