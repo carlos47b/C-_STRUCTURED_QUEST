@@ -1,62 +1,89 @@
 ﻿using System;
 
-class AnalizadorNombres
+class ValidadorDatos
 {
     static void Main(string[] args)
     {
         Console.WriteLine("=====================================");
-        Console.WriteLine("   ANALIZADOR DE NOMBRES - NIVEL 2");
+        Console.WriteLine("   VALIDADOR DE DATOS - NIVEL 2");
         Console.WriteLine("=====================================\n");
 
-        string nombreOriginal = LeerTextoValidado("Ingrese el nombre completo: ");
+        
+        int edad = LeerEnteroConTryParse("Ingrese su edad: ");
+        double salario = LeerDoubleConTryParse("Ingrese su salario: ");
+        int anioNacimiento = LeerEnteroConTryParse("Ingrese su año de nacimiento: ");
 
-        // --- Manejo de espacios innecesarios ---
-        // Trim() quita espacios al inicio y al final.
-        // Reemplazamos múltiples espacios internos por uno solo.
-        string nombreLimpio = LimpiarEspacios(nombreOriginal);
+        Console.WriteLine("\n===== DATOS VALIDADOS =====");
+        Console.WriteLine($"Edad             : {edad}");
+        Console.WriteLine($"Salario          : {salario:C}"); 
+        Console.WriteLine($"Año de nacimiento: {anioNacimiento}");
 
-        int cantidadCaracteres = nombreLimpio.Length;
-        string nombreMayusculas = nombreLimpio.ToUpper();
-        string nombreMinusculas = nombreLimpio.ToLower();
+        
+        Console.WriteLine("\n--- Ejemplo adicional usando Parse() con try/catch ---");
+        Console.Write("Ingrese un número extra para probar Parse(): ");
+        string entradaExtra = Console.ReadLine();
 
-        Console.WriteLine("\n===== REPORTE DEL NOMBRE =====");
-        Console.WriteLine($"Nombre limpio      : \"{nombreLimpio}\"");
-        Console.WriteLine($"Cantidad caracteres : {cantidadCaracteres}");
-        Console.WriteLine($"En MAYÚSCULAS      : {nombreMayusculas}");
-        Console.WriteLine($"en minúsculas      : {nombreMinusculas}");
+        try
+        {
+            int numeroExtra = int.Parse(entradaExtra);
+            Console.WriteLine($"Número ingresado correctamente: {numeroExtra}");
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Error: el texto ingresado no tiene un formato numérico válido.");
+        }
+        catch (OverflowException)
+        {
+            Console.WriteLine("Error: el número es demasiado grande o pequeño para un entero.");
+        }
     }
 
-    // Pide texto y valida que no esté vacío ni sean solo espacios
-    static string LeerTextoValidado(string mensaje)
+   
+    static int LeerEnteroConTryParse(string mensaje)
     {
-        string entrada;
+        int valor;
+        bool esValido;
 
         do
         {
             Console.Write(mensaje);
-            entrada = Console.ReadLine();
+            string entrada = Console.ReadLine();
+            esValido = int.TryParse(entrada, out valor);
 
-            if (string.IsNullOrWhiteSpace(entrada))
+            if (!esValido)
             {
-                Console.WriteLine("Error: el nombre no puede estar vacío.\n");
+                Console.WriteLine("Error: ingrese un número entero válido (sin letras ni símbolos).\n");
             }
 
-        } while (string.IsNullOrWhiteSpace(entrada));
+        } while (!esValido);
 
-        return entrada;
+        return valor;
     }
 
-    // Quita espacios al inicio/final y colapsa espacios dobles internos
-    static string LimpiarEspacios(string texto)
+   
+    static double LeerDoubleConTryParse(string mensaje)
     {
-        string resultado = texto.Trim();
+        double valor;
+        bool esValido;
 
-        // Mientras existan espacios dobles, los vamos reemplazando por uno solo
-        while (resultado.Contains("  "))
+        do
         {
-            resultado = resultado.Replace("  ", " ");
-        }
+            Console.Write(mensaje);
+            string entrada = Console.ReadLine();
+            esValido = double.TryParse(entrada, out valor);
 
-        return resultado;
+            if (!esValido)
+            {
+                Console.WriteLine("Error: ingrese un número válido (puede tener decimales).\n");
+            }
+            else if (valor < 0)
+            {
+                Console.WriteLine("Error: el salario no puede ser negativo.\n");
+                esValido = false;
+            }
+
+        } while (!esValido);
+
+        return valor;
     }
 }
