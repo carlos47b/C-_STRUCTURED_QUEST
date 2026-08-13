@@ -1,72 +1,68 @@
 ﻿using System;
 
-class RelojSistema
+class SimuladorMatematico
 {
     static void Main(string[] args)
     {
         Console.WriteLine("=====================================");
-        Console.WriteLine("     RELOJ DEL SISTEMA - NIVEL 2");
+        Console.WriteLine("   SIMULADOR MATEMÁTICO - NIVEL 2");
         Console.WriteLine("=====================================\n");
 
-        DateTime ahora = DateTime.Now;
+        double numero1 = LeerDoubleValidado("Ingrese el primer número: ");
+        double numero2 = LeerDoubleValidado("Ingrese el segundo número: ");
 
-        Console.WriteLine("===== FECHA Y HORA ACTUAL =====");
-        Console.WriteLine($"Fecha y hora completa : {ahora}");
-        Console.WriteLine($"Día                    : {ahora.Day}");
-        Console.WriteLine($"Mes                    : {ahora.Month} ({ahora:MMMM})");
-        Console.WriteLine($"Año                    : {ahora.Year}");
-        Console.WriteLine($"Hora                   : {ahora:HH:mm:ss}");
-        Console.WriteLine($"Día de la semana       : {ahora.DayOfWeek}");
+        // --- Uso de la clase Math ---
+        double potencia = Math.Pow(numero1, numero2);         
+        double raizNumero1 = CalcularRaiz(numero1);             
+        double raizNumero2 = CalcularRaiz(numero2);
+        double valorAbsoluto1 = Math.Abs(numero1);               
+        double valorAbsoluto2 = Math.Abs(numero2);
+        double redondeo1 = Math.Round(numero1, 2);               
+        double redondeo2 = Math.Round(numero2, 2);
+        double mayor = Math.Max(numero1, numero2);               
+        double menor = Math.Min(numero1, numero2);               
 
-        // --- Reto adicional: calcular edad a partir de fecha de nacimiento ---
-        Console.WriteLine("\n===== CÁLCULO DE EDAD =====");
-        DateTime fechaNacimiento = LeerFechaValidada("Ingrese su fecha de nacimiento (dd/mm/aaaa): ");
-
-        int edad = CalcularEdad(fechaNacimiento, ahora);
-
-        Console.WriteLine($"\nFecha de nacimiento: {fechaNacimiento:dd/MM/yyyy}");
-        Console.WriteLine($"Edad actual: {edad} años");
+        Console.WriteLine("\n===== RESULTADOS =====");
+        Console.WriteLine($"Potencia ({numero1} ^ {numero2})       : {potencia}");
+        Console.WriteLine($"Raíz cuadrada de {numero1}            : {raizNumero1}");
+        Console.WriteLine($"Raíz cuadrada de {numero2}            : {raizNumero2}");
+        Console.WriteLine($"Valor absoluto de {numero1}           : {valorAbsoluto1}");
+        Console.WriteLine($"Valor absoluto de {numero2}           : {valorAbsoluto2}");
+        Console.WriteLine($"Redondeo de {numero1} (2 decimales)   : {redondeo1}");
+        Console.WriteLine($"Redondeo de {numero2} (2 decimales)   : {redondeo2}");
+        Console.WriteLine($"Mayor de los dos números              : {mayor}");
+        Console.WriteLine($"Menor de los dos números              : {menor}");
     }
 
-    // Pide una fecha como texto y la valida con TryParse (no truena con texto inválido)
-    static DateTime LeerFechaValidada(string mensaje)
+    static double LeerDoubleValidado(string mensaje)
     {
-        DateTime fecha;
+        double valor;
         bool esValido;
 
         do
         {
             Console.Write(mensaje);
             string entrada = Console.ReadLine();
-            esValido = DateTime.TryParse(entrada, out fecha);
+            esValido = double.TryParse(entrada, out valor);
 
             if (!esValido)
             {
-                Console.WriteLine("Error: formato de fecha inválido. Use dd/mm/aaaa.\n");
-            }
-            else if (fecha > DateTime.Now)
-            {
-                Console.WriteLine("Error: la fecha de nacimiento no puede ser en el futuro.\n");
-                esValido = false;
+                Console.WriteLine("Error: debe ingresar un número válido.\n");
             }
 
         } while (!esValido);
 
-        return fecha;
+        return valor;
     }
 
-
-    static int CalcularEdad(DateTime nacimiento, DateTime fechaActual)
+    static double CalcularRaiz(double numero)
     {
-        int edad = fechaActual.Year - nacimiento.Year;
-
-       
-        if (fechaActual.Month < nacimiento.Month ||
-           (fechaActual.Month == nacimiento.Month && fechaActual.Day < nacimiento.Day))
+        if (numero < 0)
         {
-            edad--;
+            Console.WriteLine($"(Nota: {numero} es negativo, no tiene raíz cuadrada real; se usa su valor absoluto)");
+            return Math.Sqrt(Math.Abs(numero));
         }
 
-        return edad;
+        return Math.Sqrt(numero);
     }
 }
